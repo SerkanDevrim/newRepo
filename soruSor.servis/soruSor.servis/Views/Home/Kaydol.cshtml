@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    <h1>Kayıt</h1>
+</p>
+<table border ="0">
+    <tr>
+        <td><b>Ad:</b></td>
+        <td><input type="text" id="kayit_Ad" /></td>
+    </tr>
+    <tr>
+        <td><b> Soyad:</b></td>
+        <td><input type="text" id="kayit_Soyad" /></td>
+    </tr>
+    <tr>
+        <td><b>Kullanıcı Ad</b></td>
+        <td><input type="text" id="kayit_kullaniciAd" /></td>
+    </tr>
+    <tr>
+        <td><b>Kullanıcı Sifre:</b></td>
+        <td><input type="password" id="kayit_kullaniciSifre" /></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td align="right"> <button onclick="kaydol()">Kaydol</button></td>
+    </tr>
+</table>
+    
+<script>
+    function kaydol() {
+        var kayit_Ad = document.getElementById("kayit_Ad").value;
+        var kayit_Soyad = document.getElementById("kayit_Soyad").value;
+        var kayit_kullaniciAdi = document.getElementById("kayit_kullaniciAd").value;
+        var kayit_kullaniciSifre = document.getElementById("kayit_kullaniciSifre").value;
+
+        $.post("/Kullanici/Kaydol", {
+            kullaniciAd: kayit_kullaniciAdi,
+            kullaniciSifre: kayit_kullaniciSifre,
+            isim: kayit_Ad,
+            soyisim: kayit_Soyad
+        }, function (data) {
+            if (data == true) {
+                alert("Başarılı");
+                window.location.href = "/Home/Giris";
+            }
+            else {
+                alert("Kaydolma Başarısız!");
+            }
+        });
+    }
+
+</script>
+

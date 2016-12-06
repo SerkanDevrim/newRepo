@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="soruSorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="cevap">
+    <Key>
+      <PropertyRef Name="cevapId" />
+    </Key>
+    <Property Name="cevapId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="soruId" Type="Int32" Nullable="false" />
+    <Property Name="cevap1" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="cevapTarih" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Soru" Relationship="Self.FK_cevap_Soru" FromRole="cevap" ToRole="Soru" />
+    <NavigationProperty Name="favori" Relationship="Self.FK_favori_cevap" FromRole="cevap" ToRole="favori" />
+  </EntityType>
+  <EntityType Name="favori">
+    <Key>
+      <PropertyRef Name="favoriId" />
+    </Key>
+    <Property Name="favoriId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="cevapId" Type="Int32" Nullable="false" />
+    <Property Name="kullaniciId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="cevap" Relationship="Self.FK_favori_cevap" FromRole="favori" ToRole="cevap" />
+    <NavigationProperty Name="kullanici" Relationship="Self.FK_favori_kullanici" FromRole="favori" ToRole="kullanici" />
+  </EntityType>
+  <EntityType Name="kullanici">
+    <Key>
+      <PropertyRef Name="kullaniciId" />
+    </Key>
+    <Property Name="kullaniciId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="kullaniciAd" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="favori" Relationship="Self.FK_favori_kullanici" FromRole="kullanici" ToRole="favori" />
+    <NavigationProperty Name="Soru" Relationship="Self.FK_Soru_kullanici" FromRole="kullanici" ToRole="Soru" />
+    <Property Name="kullaniciSifre" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+    <Property Name="Ad" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+    <Property Name="Soyad" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Soru">
+    <Key>
+      <PropertyRef Name="soruId" />
+    </Key>
+    <Property Name="soruId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="kullaniciId" Type="Int32" Nullable="false" />
+    <Property Name="soru1" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="soruTarih" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="soruGoruntule" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="cevap" Relationship="Self.FK_cevap_Soru" FromRole="Soru" ToRole="cevap" />
+    <NavigationProperty Name="kullanici" Relationship="Self.FK_Soru_kullanici" FromRole="Soru" ToRole="kullanici" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_cevap_Soru">
+    <End Role="Soru" Type="Self.Soru" Multiplicity="1" />
+    <End Role="cevap" Type="Self.cevap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Soru">
+        <PropertyRef Name="soruId" />
+      </Principal>
+      <Dependent Role="cevap">
+        <PropertyRef Name="soruId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_favori_cevap">
+    <End Role="cevap" Type="Self.cevap" Multiplicity="1" />
+    <End Role="favori" Type="Self.favori" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cevap">
+        <PropertyRef Name="cevapId" />
+      </Principal>
+      <Dependent Role="favori">
+        <PropertyRef Name="cevapId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_favori_kullanici">
+    <End Role="kullanici" Type="Self.kullanici" Multiplicity="1" />
+    <End Role="favori" Type="Self.favori" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="kullanici">
+        <PropertyRef Name="kullaniciId" />
+      </Principal>
+      <Dependent Role="favori">
+        <PropertyRef Name="kullaniciId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Soru_kullanici">
+    <End Role="kullanici" Type="Self.kullanici" Multiplicity="1" />
+    <End Role="Soru" Type="Self.Soru" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="kullanici">
+        <PropertyRef Name="kullaniciId" />
+      </Principal>
+      <Dependent Role="Soru">
+        <PropertyRef Name="kullaniciId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="soruSorEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="cevap" EntityType="Self.cevap" />
+    <EntitySet Name="favori" EntityType="Self.favori" />
+    <EntitySet Name="kullanici" EntityType="Self.kullanici" />
+    <EntitySet Name="Soru" EntityType="Self.Soru" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK_cevap_Soru" Association="Self.FK_cevap_Soru">
+      <End Role="Soru" EntitySet="Soru" />
+      <End Role="cevap" EntitySet="cevap" />
+    </AssociationSet>
+    <AssociationSet Name="FK_favori_cevap" Association="Self.FK_favori_cevap">
+      <End Role="cevap" EntitySet="cevap" />
+      <End Role="favori" EntitySet="favori" />
+    </AssociationSet>
+    <AssociationSet Name="FK_favori_kullanici" Association="Self.FK_favori_kullanici">
+      <End Role="kullanici" EntitySet="kullanici" />
+      <End Role="favori" EntitySet="favori" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Soru_kullanici" Association="Self.FK_Soru_kullanici">
+      <End Role="kullanici" EntitySet="kullanici" />
+      <End Role="Soru" EntitySet="Soru" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

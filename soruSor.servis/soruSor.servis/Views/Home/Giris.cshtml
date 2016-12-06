@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p>
+    <h1>Giriş</h1>
+</p>
+<table border="0">
+    <tr>
+        <td><b>Kullanici Ad:</b></td>
+        <td><input type="text" id="kullaniciAdi" /></td>
+    </tr>
+    <tr>
+        <td><b>Kullanici Şifre:</b></td>
+        <td><input type="password" id="kullaniciSifre" /></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td align="right"> <input type="checkbox" name="chSifre" value="Sifre">Şifreyi Göster</td>
+    </tr>   
+    <tr>
+        <td></td>
+        <td align="right"> <button onclick="giris()">Giriş Yap</button></td>
+    </tr>
+</table>
+   
+    <script>
+
+        function giris() {
+            var k_adi = document.getElementById("kullaniciAdi").value;
+            var k_sifre = document.getElementById("kullaniciSifre").value;
+
+            $.post("/Kullanici/Giris", {
+                id: k_adi,
+                sifre: k_sifre
+            }, function (data) {
+                if (data == true) {
+                    alert("Giriş Başarılı");
+                    window.location.href = "/Home/Sorular";
+                }
+                else {
+                    alert("Giriş Başarısız");
+                }
+            });
+        }
+    </script>
+
+
+
